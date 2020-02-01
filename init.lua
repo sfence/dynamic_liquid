@@ -512,14 +512,26 @@ if displace_liquid then
 	end
 
 	-- Conserve liquids, when placing nodes in liquids try to find a place to displace the liquid to.
-	minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack, pointed_thing)
-		local flowing = dynamic_liquid.registered_liquids[oldnode.name]
-		if flowing ~= nil then
-			local dest = flood_search_outlet(pos, oldnode.name, flowing)
-			if dest ~= nil then
-				minetest.swap_node(dest, oldnode)
-			end
-		end
-	end)
+  if (false) then
+    minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack, pointed_thing)
+      local flowing = dynamic_liquid.registered_liquids[oldnode.name]
+      if flowing ~= nil then
+        local dest = flood_search_outlet(pos, oldnode.name, flowing)
+        if dest ~= nil then
+          minetest.swap_node(dest, oldnode)
+        end
+      end
+    end)
+  end
+  
+  default.liquid_after_destruct = function(pos, oldnode)
+      local flowing = dynamic_liquid.registered_liquids[oldnode.name]
+      if flowing ~= nil then
+        local dest = flood_search_outlet(pos, oldnode.name, flowing)
+        if dest ~= nil then
+          minetest.swap_node(dest, oldnode)
+        end
+      end
+    end
 
 end
